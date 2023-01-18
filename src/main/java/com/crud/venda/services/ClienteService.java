@@ -1,0 +1,40 @@
+package com.crud.venda.services;
+
+import com.crud.venda.models.converter.EntityToDTOConverter;
+import com.crud.venda.models.dto.Cliente;
+import com.crud.venda.models.entity.ClienteEntity;
+import com.crud.venda.repositories.ClienteRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ClienteService {
+
+    private final ClienteRepository clienteRepository;
+
+    private final EntityToDTOConverter<ClienteEntity, Cliente> converter;
+
+    public Cliente criar(Cliente cliente) {
+        return converter.toDomain(clienteRepository.save(converter.toEntity(cliente)));
+    }
+
+    public Cliente alterar(Long id, Cliente cliente) {
+        cliente.setId(id);
+        return converter.toDomain(clienteRepository.save(converter.toEntity(cliente)));
+    }
+
+    public List<Cliente> consultarTodos() {
+        return converter.toDomains(clienteRepository.findAll());
+    }
+
+    public Cliente consultarPorId(Long id) {
+        return converter.toDomain(clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não existe")));
+    }
+
+    public void deletar(Long id) {
+        clienteRepository.deleteById(id);
+    }
+}
