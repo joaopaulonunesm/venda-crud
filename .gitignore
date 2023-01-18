@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### BD ###
+/etc/bancod-de-dados/
+
 ### STS ###
 .apt_generated
 .classpath

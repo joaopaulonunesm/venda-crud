@@ -1,10 +1,11 @@
 # Venda Crud
 
 Crud de Vendas para estudo em Grupo
-Objetivo: Aprender e aperfeiçoar os conhecimentos em Java, Spring boot, Api Rest, Testes automáticos.
+
+Objetivo: Aprender e aperfeiçoar os conhecimentos em Java, Spring boot, Api Rest, Testes automáticos, infra, etc.
 
 Informações:
 - Java Version 17
 - Spring Boot version 3.0.0
-- Collection do postman das APIs na raiz do projeto
-- Banco de dados H2 em arquivo na raiz do projeto
+- A Collection das APIs para importação no Postman estão em ``etc/collections`` 
+- O arquivo de Banco de dados H2 é gerado no momento da execução do programa no path especificado no ``application.properties``

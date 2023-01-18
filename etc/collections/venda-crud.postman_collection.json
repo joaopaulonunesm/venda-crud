@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "6bfe6d0b-022a-4e5f-9892-efabf02fc09e",
+		"name": "venda-crud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "Busca",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/produtos"
+					},
+					"response": []
+				},
+				{
+					"name": "Busca por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/produtos/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Bermuda\",\r\n    \"valor\": \"150\",\r\n    \"quantidade\": 19\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/produtos"
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Bermuda Nike\",\r\n    \"valor\": \"150\",\r\n    \"quantidade\": 23\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/produtos/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/produtos/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "Busca",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/clientes"
+					},
+					"response": []
+				},
+				{
+					"name": "Busca por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/clientes/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"João Marques\",\r\n    \"endereco\": \"Av. Londrina, 934\",\r\n    \"cpf\": \"10399505903\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/clientes"
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Camiseta\",\r\n    \"endereco\": \"\",\r\n    \"cpf\": \"\",\r\n    \"dataNascimento\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/clientes/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/clientes/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Venda",
+			"item": [
+				{
+					"name": "Busca",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vendas"
+					},
+					"response": []
+				},
+				{
+					"name": "Busca por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vendas/5"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"valorTotal\": \"200\",\r\n\t\"desconto\": \"0\",\r\n\t\"valorFinal\": \"200\",\r\n\t\"produtos\": [{\r\n\t\t\"id\": 1\r\n\t}, {\r\n        \"id\": 1\r\n    },\r\n    {\r\n        \"id\": 2\r\n    }],\r\n\t\"cliente\": {\r\n\t\t\"id\": 1\r\n\t}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vendas"
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"\",\r\n\t\"valorTotal\": \"\",\r\n\t\"desconto\": \"\",\r\n\t\"valorFinal\": \"\",\r\n\t\"produtos\": [{\r\n\t\t\"id\": \"\"\r\n\t}, {\r\n\t\t\"id\": \"\"\r\n\t}],\r\n\t\"cliente\": {\r\n\t\t\"id\": \"\"\r\n\t}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vendas/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/produtos/1"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
