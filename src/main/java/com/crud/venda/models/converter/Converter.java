@@ -3,7 +3,7 @@ package com.crud.venda.models.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface EntityToDTOConverter<E, D> {
+public interface Converter<E, D> {
 
     E toEntity(D domain);
     D toDomain(E entity);

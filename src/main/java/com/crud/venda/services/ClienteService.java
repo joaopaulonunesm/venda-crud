@@ -1,6 +1,6 @@
 package com.crud.venda.services;
 
-import com.crud.venda.models.converter.EntityToDTOConverter;
+import com.crud.venda.models.converter.Converter;
 import com.crud.venda.models.dto.Cliente;
 import com.crud.venda.models.entity.ClienteEntity;
 import com.crud.venda.repositories.ClienteRepository;
@@ -15,7 +15,7 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
 
-    private final EntityToDTOConverter<ClienteEntity, Cliente> converter;
+    private final Converter<ClienteEntity, Cliente> converter;
 
     public Cliente criar(Cliente cliente) {
         return converter.toDomain(clienteRepository.save(converter.toEntity(cliente)));

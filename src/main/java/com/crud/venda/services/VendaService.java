@@ -1,11 +1,9 @@
 package com.crud.venda.services;
 
-import com.crud.venda.models.converter.EntityToDTOConverter;
+import com.crud.venda.models.converter.Converter;
 import com.crud.venda.models.dto.Produto;
 import com.crud.venda.models.dto.Venda;
 import com.crud.venda.models.entity.VendaEntity;
-import com.crud.venda.repositories.ClienteRepository;
-import com.crud.venda.repositories.ProdutoRepository;
 import com.crud.venda.repositories.VendaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,7 @@ public class VendaService {
     private final ClienteService clienteService;
     private final ProdutoService produtoService;
 
-    private final EntityToDTOConverter<VendaEntity, Venda> converter;
+    private final Converter<VendaEntity, Venda> converter;
 
     public Venda criar(Venda venda) {
 

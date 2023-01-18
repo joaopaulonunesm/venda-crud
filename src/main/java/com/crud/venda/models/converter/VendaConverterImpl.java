@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class VendaConverterImpl implements EntityToDTOConverter<VendaEntity, Venda> {
+public class VendaConverterImpl implements Converter<VendaEntity, Venda> {
 
-    private final EntityToDTOConverter<ProdutoEntity, Produto> produtoConverter;
-    private final EntityToDTOConverter<ClienteEntity, Cliente> clienteConverter;
+    private final Converter<ProdutoEntity, Produto> produtoConverter;
+    private final Converter<ClienteEntity, Cliente> clienteConverter;
 
     @Override
     public VendaEntity toEntity(Venda domain) {

@@ -5,7 +5,7 @@ import com.crud.venda.models.entity.ProdutoEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProdutoConverterImpl implements EntityToDTOConverter<ProdutoEntity, Produto> {
+public class ProdutoConverterImpl implements Converter<ProdutoEntity, Produto> {
 
     @Override
     public ProdutoEntity toEntity(Produto domain) {
