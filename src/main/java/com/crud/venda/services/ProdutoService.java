@@ -17,13 +17,13 @@ public class ProdutoService {
 
     private final Converter<ProdutoEntity, Produto> converter;
 
-    public Produto criar(Produto Produto) {
-        return converter.toDomain(produtoRepository.save(converter.toEntity(Produto)));
+    public Produto criar(Produto produto) {
+        return converter.toDomain(produtoRepository.save(converter.toEntity(produto)));
     }
 
-    public Produto alterar(Long id, Produto Produto) {
-        Produto.setId(id);
-        return converter.toDomain(produtoRepository.save(converter.toEntity(Produto)));
+    public Produto alterar(Long id, Produto produto) {
+        produto.setId(id);
+        return converter.toDomain(produtoRepository.save(converter.toEntity(produto)));
     }
 
     public List<Produto> consultarTodos() {

@@ -1,14 +1,12 @@
 package com.crud.venda.services;
 
 import com.crud.venda.models.converter.Converter;
-import com.crud.venda.models.dto.Produto;
 import com.crud.venda.models.dto.Venda;
 import com.crud.venda.models.entity.VendaEntity;
 import com.crud.venda.repositories.VendaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,19 +20,14 @@ public class VendaService {
     private final Converter<VendaEntity, Venda> converter;
 
     public Venda criar(Venda venda) {
-
         venda.setCliente(clienteService.consultarPorId(venda.getCliente().getId()));
-
-        List<Produto> produtos = new ArrayList<>();
-        venda.getProdutos().forEach(produto -> produtos.add(produtoService.consultarPorId(produto.getId())));
-        venda.setProdutos(produtos);
-
+        venda.setProdutos(venda.getProdutos().stream().map(produto -> produtoService.consultarPorId(produto.getId())).toList());
         return converter.toDomain(vendaRepository.save(converter.toEntity(venda)));
     }
 
-    public Venda alterar(Long id, Venda Venda) {
-        Venda.setId(id);
-        return converter.toDomain(vendaRepository.save(converter.toEntity(Venda)));
+    public Venda alterar(Long id, Venda venda) {
+        venda.setId(id);
+        return converter.toDomain(vendaRepository.save(converter.toEntity(venda)));
     }
 
     public List<Venda> consultarTodos() {

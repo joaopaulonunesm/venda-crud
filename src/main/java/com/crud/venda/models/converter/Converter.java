@@ -1,6 +1,5 @@
 package com.crud.venda.models.converter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface Converter<E, D> {
@@ -9,14 +8,10 @@ public interface Converter<E, D> {
     D toDomain(E entity);
 
     default List<D> toDomains(List<E> entities){
-        List<D> domains = new ArrayList<>();
-        entities.stream().forEach(entity -> domains.add(toDomain(entity)));
-        return domains;
+        return entities.stream().map(this::toDomain).toList();
     }
 
     default List<E> toEntities(List<D> domains){
-        List<E> entities = new ArrayList<>();
-        domains.stream().forEach(domain -> entities.add(toEntity(domain)));
-        return entities;
+        return domains.stream().map(this::toEntity).toList();
     }
 }
