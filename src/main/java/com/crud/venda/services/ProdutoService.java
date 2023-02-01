@@ -22,6 +22,7 @@ public class ProdutoService {
     }
 
     public Produto alterar(Long id, Produto produto) {
+        consultarPorId(id);
         produto.setId(id);
         return converter.toDomain(produtoRepository.save(converter.toEntity(produto)));
     }
@@ -35,6 +36,7 @@ public class ProdutoService {
     }
 
     public void deletar(Long id) {
+        consultarPorId(id);
         produtoRepository.deleteById(id);
     }
 }

@@ -22,6 +22,7 @@ public class ClienteService {
     }
 
     public Cliente alterar(Long id, Cliente cliente) {
+        consultarPorId(id);
         cliente.setId(id);
         return converter.toDomain(clienteRepository.save(converter.toEntity(cliente)));
     }
@@ -35,6 +36,7 @@ public class ClienteService {
     }
 
     public void deletar(Long id) {
+        consultarPorId(id);
         clienteRepository.deleteById(id);
     }
 }

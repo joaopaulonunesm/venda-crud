@@ -26,6 +26,7 @@ public class VendaService {
     }
 
     public Venda alterar(Long id, Venda venda) {
+        consultarPorId(id);
         venda.setId(id);
         return converter.toDomain(vendaRepository.save(converter.toEntity(venda)));
     }
@@ -39,6 +40,7 @@ public class VendaService {
     }
 
     public void deletar(Long id) {
+        consultarPorId(id);
         vendaRepository.deleteById(id);
     }
 }
