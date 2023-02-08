@@ -5,6 +5,7 @@ import com.crud.venda.models.dto.Produto;
 import com.crud.venda.models.entity.ProdutoEntity;
 import com.crud.venda.repositories.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +38,10 @@ public class ProdutoService {
 
     public void deletar(Long id) {
         consultarPorId(id);
-        produtoRepository.deleteById(id);
+        try {
+            produtoRepository.deleteById(id);
+        } catch (DataIntegrityViolationException exception) {
+            throw new RuntimeException("Produto não pode ser deletado pois já existe vendas associado a ele.");
+        }
     }
 }
