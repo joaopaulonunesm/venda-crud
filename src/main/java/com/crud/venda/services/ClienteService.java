@@ -15,7 +15,6 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
-
     private final Converter<ClienteEntity, Cliente> converter;
 
     public Cliente criar(Cliente cliente) {
@@ -33,7 +32,9 @@ public class ClienteService {
     }
 
     public Cliente consultarPorId(Long id) {
-        return converter.toDomain(clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não existe")));
+        return converter.toDomain(clienteRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não existe")));
     }
 
     public void deletar(Long id) {

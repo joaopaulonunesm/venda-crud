@@ -1,6 +1,8 @@
 package com.crud.venda.services;
 
 import com.crud.venda.models.converter.Converter;
+import com.crud.venda.models.dto.Cliente;
+import com.crud.venda.models.dto.Produto;
 import com.crud.venda.models.dto.Venda;
 import com.crud.venda.models.entity.VendaEntity;
 import com.crud.venda.repositories.VendaRepository;
@@ -20,14 +22,25 @@ public class VendaService {
     private final Converter<VendaEntity, Venda> converter;
 
     public Venda criar(Venda venda) {
-        venda.setCliente(clienteService.consultarPorId(venda.getCliente().getId()));
-        venda.setProdutos(venda.getProdutos().stream().map(produto -> produtoService.consultarPorId(produto.getId())).toList());
+        Cliente cliente = clienteService.consultarPorId(venda.getCliente().getId());
+        venda.setCliente(cliente);
+
+        List<Produto> produtos = venda.getProdutos().stream().map(produto -> produtoService.consultarPorId(produto.getId())).toList();
+        venda.setProdutos(produtos);
+
         return converter.toDomain(vendaRepository.save(converter.toEntity(venda)));
     }
 
     public Venda alterar(Long id, Venda venda) {
         consultarPorId(id);
         venda.setId(id);
+
+        Cliente cliente = clienteService.consultarPorId(venda.getCliente().getId());
+        venda.setCliente(cliente);
+
+        List<Produto> produtos = venda.getProdutos().stream().map(produto -> produtoService.consultarPorId(produto.getId())).toList();
+        venda.setProdutos(produtos);
+
         return converter.toDomain(vendaRepository.save(converter.toEntity(venda)));
     }
 
@@ -36,7 +49,9 @@ public class VendaService {
     }
 
     public Venda consultarPorId(Long id) {
-        return converter.toDomain(vendaRepository.findById(id).orElseThrow(() -> new RuntimeException("Venda não existe")));
+        return converter.toDomain(vendaRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Venda não existe")));
     }
 
     public void deletar(Long id) {

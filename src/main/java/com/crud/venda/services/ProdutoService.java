@@ -15,7 +15,6 @@ import java.util.List;
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
-
     private final Converter<ProdutoEntity, Produto> converter;
 
     public Produto criar(Produto produto) {
@@ -33,7 +32,9 @@ public class ProdutoService {
     }
 
     public Produto consultarPorId(Long id) {
-        return converter.toDomain(produtoRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não existe")));
+        return converter.toDomain(produtoRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não existe")));
     }
 
     public void deletar(Long id) {
