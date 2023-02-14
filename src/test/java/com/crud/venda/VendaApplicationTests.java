@@ -9,5 +9,4 @@ class VendaApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
