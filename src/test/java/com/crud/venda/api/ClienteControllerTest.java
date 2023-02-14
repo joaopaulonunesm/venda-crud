@@ -3,6 +3,7 @@ package com.crud.venda.api;
 import com.crud.venda.domain.Cliente;
 import com.crud.venda.infrastructure.database.entities.ClienteEntity;
 import com.crud.venda.infrastructure.database.repositories.ClienteRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,11 +127,7 @@ public class ClienteControllerTest {
         verifyNoMoreInteractions(clienteRepository);
     }
 
-    private static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    private static String asJsonString(final Object obj) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(obj);
     }
 }
