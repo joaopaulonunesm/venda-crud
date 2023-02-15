@@ -22,12 +22,15 @@ public class ClienteDataProvider implements ClienteGateway {
 
     @Override
     public Cliente salvar(Cliente cliente) {
-        return converter.toDomain(clienteRepository.save(converter.toEntity(cliente)));
+        ClienteEntity entity = converter.toEntity(cliente);
+        entity = clienteRepository.save(entity);
+        return converter.toDomain(entity);
     }
 
     @Override
     public List<Cliente> buscarTodos() {
-        return converter.toDomains(clienteRepository.findAll());
+        List<ClienteEntity> clientes = clienteRepository.findAll();
+        return converter.toDomains(clientes);
     }
 
     @Override

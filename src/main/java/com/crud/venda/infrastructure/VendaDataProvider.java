@@ -21,12 +21,15 @@ public class VendaDataProvider implements VendaGateway {
 
     @Override
     public Venda salvar(Venda venda) {
-        return converter.toDomain(vendaRepository.save(converter.toEntity(venda)));
+        VendaEntity entity = converter.toEntity(venda);
+        entity = vendaRepository.save(entity);
+        return converter.toDomain(entity);
     }
 
     @Override
     public List<Venda> buscarTodos() {
-        return converter.toDomains(vendaRepository.findAll());
+        List<VendaEntity> vendas = vendaRepository.findAll();
+        return converter.toDomains(vendas);
     }
 
     @Override

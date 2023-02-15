@@ -1,10 +1,10 @@
 package com.crud.venda.infrastructure;
 
-import com.crud.venda.infrastructure.database.entities.converter.Converter;
-import com.crud.venda.infrastructure.database.entities.ProdutoEntity;
-import com.crud.venda.infrastructure.database.repositories.ProdutoRepository;
 import com.crud.venda.domain.Produto;
 import com.crud.venda.domain.gateways.ProdutoGateway;
+import com.crud.venda.infrastructure.database.entities.ProdutoEntity;
+import com.crud.venda.infrastructure.database.entities.converter.Converter;
+import com.crud.venda.infrastructure.database.repositories.ProdutoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -22,12 +22,15 @@ public class ProdutoDataProvider implements ProdutoGateway {
 
     @Override
     public Produto salvar(Produto produto) {
-        return converter.toDomain(produtoRepository.save(converter.toEntity(produto)));
+        ProdutoEntity produtoEntity = converter.toEntity(produto);
+        produtoEntity = produtoRepository.save(produtoEntity);
+        return converter.toDomain(produtoEntity);
     }
 
     @Override
     public List<Produto> buscarTodos() {
-        return converter.toDomains(produtoRepository.findAll());
+        List<ProdutoEntity> produtos = produtoRepository.findAll();
+        return converter.toDomains(produtos);
     }
 
     @Override
