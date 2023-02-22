@@ -1,7 +1,6 @@
 package com.crud.venda.api;
 
 import com.crud.venda.domain.Produto;
-import com.crud.venda.infrastructure.database.entities.ProdutoEntity;
 import com.crud.venda.infrastructure.database.repositories.ProdutoRepository;
 import com.crud.venda.utils.DataUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,25 +9,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Optional;
 
 import static com.crud.venda.utils.DataUtils.*;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ProdutoControllerTest {
 
-    @MockBean
+    @Autowired
     private ProdutoRepository produtoRepository;
 
     @Autowired
@@ -36,10 +34,7 @@ public class ProdutoControllerTest {
 
     @Test
     public void deveCriarProduto() throws Exception {
-
         Produto produtoRequest = DataUtils.getProduto();
-
-        when(produtoRepository.save(any())).thenReturn(DataUtils.getProdutoEntity());
 
         mockMvc.perform(post("/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -49,14 +44,12 @@ public class ProdutoControllerTest {
                 .andExpect(jsonPath("$.nome").value(NOME_PRODUTO))
                 .andExpect(jsonPath("$.valor").value(VALOR_PRODUTO))
                 .andExpect(jsonPath("$.quantidade").value(QUANTIDADE_PRODUTO));
-
-        verify(produtoRepository, times(1)).save(any());
-        verifyNoMoreInteractions(produtoRepository);
     }
 
     @Test
     public void deveConsultarTodos() throws Exception {
-        when(produtoRepository.findAll()).thenReturn(DataUtils.getProdutosEntity());
+        produtoRepository.save(DataUtils.getProdutoEntity());
+        produtoRepository.save(DataUtils.getProdutoEntity2());
 
         mockMvc.perform(get("/produtos"))
                 .andExpect(status().isOk())
@@ -69,14 +62,11 @@ public class ProdutoControllerTest {
                 .andExpect(jsonPath("$[1].nome").value(NOME_PRODUTO_2))
                 .andExpect(jsonPath("$[1].valor").value(VALOR_PRODUTO_2))
                 .andExpect(jsonPath("$[1].quantidade").value(QUANTIDADE_PRODUTO_2));
-
-        verify(produtoRepository, times(1)).findAll();
-        verifyNoMoreInteractions(produtoRepository);
     }
 
     @Test
     public void deveConsultarPorId() throws Exception {
-        when(produtoRepository.findById(ID_PRODUTO)).thenReturn(Optional.of(DataUtils.getProdutoEntity()));
+        produtoRepository.save(DataUtils.getProdutoEntity());
 
         mockMvc.perform(get("/produtos/" + ID_PRODUTO))
                 .andExpect(status().isOk())
@@ -85,27 +75,16 @@ public class ProdutoControllerTest {
                 .andExpect(jsonPath("$.nome").value(NOME_PRODUTO))
                 .andExpect(jsonPath("$.valor").value(VALOR_PRODUTO))
                 .andExpect(jsonPath("$.quantidade").value(QUANTIDADE_PRODUTO));
-
-        verify(produtoRepository, times(1)).findById(ID_PRODUTO);
-        verifyNoMoreInteractions(produtoRepository);
     }
 
     @Test
     public void deveAlterarProduto() throws Exception {
+        produtoRepository.save(DataUtils.getProdutoEntity());
+
         Produto produtoRequest = new Produto();
         produtoRequest.setNome(NOME_PRODUTO_2);
         produtoRequest.setValor(VALOR_PRODUTO_2);
         produtoRequest.setQuantidade(QUANTIDADE_PRODUTO_2);
-
-        ProdutoEntity produtoEntityAlterado = ProdutoEntity.builder()
-                .id(ID_PRODUTO)
-                .nome(produtoRequest.getNome())
-                .valor(produtoRequest.getValor())
-                .quantidade(produtoRequest.getQuantidade())
-                .build();
-
-        when(produtoRepository.findById(ID_PRODUTO)).thenReturn(Optional.of(DataUtils.getProdutoEntity()));
-        when(produtoRepository.save(any())).thenReturn(produtoEntityAlterado);
 
         mockMvc.perform(put("/produtos/" + ID_PRODUTO)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -115,23 +94,18 @@ public class ProdutoControllerTest {
                 .andExpect(jsonPath("$.nome").value(NOME_PRODUTO_2))
                 .andExpect(jsonPath("$.valor").value(VALOR_PRODUTO_2))
                 .andExpect(jsonPath("$.quantidade").value(QUANTIDADE_PRODUTO_2));
-
-        verify(produtoRepository, times(1)).findById(ID_PRODUTO);
-        verify(produtoRepository, times(1)).save(any());
-        verifyNoMoreInteractions(produtoRepository);
     }
 
     @Test
     public void deveDeletarProduto() throws Exception {
-        when(produtoRepository.findById(ID_PRODUTO)).thenReturn(Optional.of(DataUtils.getProdutoEntity()));
-        doNothing().when(produtoRepository).deleteById(ID_PRODUTO);
+        produtoRepository.save(DataUtils.getProdutoEntity());
+
+        assertFalse(produtoRepository.findById(ID_PRODUTO).isEmpty());
 
         mockMvc.perform(delete("/produtos/" + ID_PRODUTO))
                 .andExpect(status().isOk());
 
-        verify(produtoRepository, times(1)).findById(ID_PRODUTO);
-        verify(produtoRepository, times(1)).deleteById(ID_PRODUTO);
-        verifyNoMoreInteractions(produtoRepository);
+        assertTrue(produtoRepository.findById(ID_PRODUTO).isEmpty());
     }
 
     private static String asJsonString(final Object obj) throws JsonProcessingException {

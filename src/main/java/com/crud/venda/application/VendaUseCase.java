@@ -26,14 +26,7 @@ public class VendaUseCase {
         List<Produto> produtos = venda.getProdutos().stream().map(produto -> produtoUseCase.consultarPorId(produto.getId())).toList();
         venda.setProdutos(produtos);
 
-        BigDecimal valorTotalProdutos = produtos.stream()
-                .map(Produto::getValor)
-                .reduce(BigDecimal::add).get();
-
-        venda.setValorTotal(valorTotalProdutos);
-
-        BigDecimal valorDesconto = valorTotalProdutos.multiply(BigDecimal.valueOf(venda.getDesconto() / 100));
-        venda.setValorFinal(valorTotalProdutos.subtract(valorDesconto));
+        calculaValorTotalEFinal(venda);
 
         return vendaGateway.salvar(venda);
     }
@@ -47,6 +40,8 @@ public class VendaUseCase {
 
         List<Produto> produtos = venda.getProdutos().stream().map(produto -> produtoUseCase.consultarPorId(produto.getId())).toList();
         venda.setProdutos(produtos);
+
+        calculaValorTotalEFinal(venda);
 
         return vendaGateway.salvar(venda);
     }
@@ -63,5 +58,16 @@ public class VendaUseCase {
     public void deletar(Long id) {
         consultarPorId(id);
         vendaGateway.deletarPorId(id);
+    }
+
+    private static void calculaValorTotalEFinal(Venda venda) {
+        BigDecimal valorTotalProdutos = venda.getProdutos().stream()
+                .map(Produto::getValor)
+                .reduce(BigDecimal::add).get();
+
+        venda.setValorTotal(valorTotalProdutos);
+
+        BigDecimal valorDesconto = valorTotalProdutos.multiply(BigDecimal.valueOf(venda.getDesconto() == null ? 0 : venda.getDesconto() / 100));
+        venda.setValorFinal(valorTotalProdutos.subtract(valorDesconto));
     }
 }

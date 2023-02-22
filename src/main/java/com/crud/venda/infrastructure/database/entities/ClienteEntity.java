@@ -3,8 +3,6 @@ package com.crud.venda.infrastructure.database.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @ToString
@@ -22,5 +20,4 @@ public class ClienteEntity {
     private String nome;
     private String endereco;
     private String cpf;
-    private LocalDate dataNascimento;
 }

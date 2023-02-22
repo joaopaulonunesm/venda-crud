@@ -2,8 +2,6 @@ package com.crud.venda.domain;
 
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @ToString
@@ -16,5 +14,4 @@ public class Cliente {
     private String nome;
     private String endereco;
     private String cpf;
-    private LocalDate dataNascimento;
 }

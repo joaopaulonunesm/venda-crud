@@ -14,7 +14,6 @@ public class ClienteConverterImpl implements Converter<ClienteEntity, Cliente> {
                 .nome(domain.getNome())
                 .endereco(domain.getEndereco())
                 .cpf(domain.getCpf())
-                .dataNascimento(domain.getDataNascimento())
                 .build();
     }
 
@@ -25,7 +24,6 @@ public class ClienteConverterImpl implements Converter<ClienteEntity, Cliente> {
                 .nome(entity.getNome())
                 .endereco(entity.getEndereco())
                 .cpf(entity.getCpf())
-                .dataNascimento(entity.getDataNascimento())
                 .build();
     }
 }
