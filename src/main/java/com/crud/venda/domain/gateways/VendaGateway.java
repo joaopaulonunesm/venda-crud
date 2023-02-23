@@ -10,4 +10,5 @@ public interface VendaGateway {
     List<Venda> buscarTodos();
     Optional<Venda> buscarPorId(Long id);
     void deletarPorId(Long id);
+    List<Venda> buscarPorCliente(Long idCliente);
 }

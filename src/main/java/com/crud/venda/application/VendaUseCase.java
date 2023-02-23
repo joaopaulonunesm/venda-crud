@@ -1,8 +1,11 @@
 package com.crud.venda.application;
 
+import com.crud.venda.application.exceptions.ApplicationException;
+import com.crud.venda.application.exceptions.ApplicationMessage;
 import com.crud.venda.domain.Cliente;
 import com.crud.venda.domain.Produto;
 import com.crud.venda.domain.Venda;
+import com.crud.venda.domain.VendaPorCliente;
 import com.crud.venda.domain.gateways.VendaGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +55,13 @@ public class VendaUseCase {
 
     public Venda consultarPorId(Long id) {
         return vendaGateway.buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Venda não existe"));
+                .orElseThrow(() -> new ApplicationException(ApplicationMessage.VENDA_NAO_EXISTENTE, id));
+    }
+
+    public VendaPorCliente consultarPorCliente(Long idCliente) {
+        clienteUseCase.consultarPorId(idCliente);
+        List<Venda> vendas = vendaGateway.buscarPorCliente(idCliente);
+        return new VendaPorCliente(vendas);
     }
 
     public void deletar(Long id) {
@@ -64,10 +73,11 @@ public class VendaUseCase {
         BigDecimal valorTotalProdutos = venda.getProdutos().stream()
                 .map(Produto::getValor)
                 .reduce(BigDecimal::add).get();
-
         venda.setValorTotal(valorTotalProdutos);
 
         BigDecimal valorDesconto = valorTotalProdutos.multiply(BigDecimal.valueOf(venda.getDesconto() == null ? 0 : venda.getDesconto() / 100));
         venda.setValorFinal(valorTotalProdutos.subtract(valorDesconto));
     }
+
+
 }

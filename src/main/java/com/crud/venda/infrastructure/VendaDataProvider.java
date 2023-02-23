@@ -44,4 +44,9 @@ public class VendaDataProvider implements VendaGateway {
     public void deletarPorId(Long id) {
         vendaRepository.deleteById(id);
     }
+
+    @Override
+    public List<Venda> buscarPorCliente(Long idCliente) {
+        return converter.toDomains(vendaRepository.findAllByClienteId(idCliente));
+    }
 }

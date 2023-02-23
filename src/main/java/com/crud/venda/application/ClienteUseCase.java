@@ -1,5 +1,7 @@
 package com.crud.venda.application;
 
+import com.crud.venda.application.exceptions.ApplicationException;
+import com.crud.venda.application.exceptions.ApplicationMessage;
 import com.crud.venda.domain.Cliente;
 import com.crud.venda.domain.gateways.ClienteGateway;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class ClienteUseCase {
     }
 
     public Cliente consultarPorId(Long id) {
-        return clienteGateway.buscarPorId(id).orElseThrow(() -> new RuntimeException("Cliente não existe"));
+        return clienteGateway.buscarPorId(id).orElseThrow(() -> new ApplicationException(ApplicationMessage.CLIENTE_NAO_EXISTENTE, id));
     }
 
     public void deletar(Long id) {

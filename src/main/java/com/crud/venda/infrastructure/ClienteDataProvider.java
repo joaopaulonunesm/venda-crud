@@ -5,6 +5,8 @@ import com.crud.venda.infrastructure.database.entities.ClienteEntity;
 import com.crud.venda.infrastructure.database.repositories.ClienteRepository;
 import com.crud.venda.domain.Cliente;
 import com.crud.venda.domain.gateways.ClienteGateway;
+import com.crud.venda.infrastructure.exceptions.InfrastructureException;
+import com.crud.venda.infrastructure.exceptions.InfrastructureMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class ClienteDataProvider implements ClienteGateway {
         try {
             clienteRepository.deleteById(id);
         } catch (DataIntegrityViolationException exception) {
-            throw new RuntimeException("Cliente não pode ser deletado pois já existe vendas associado a ele.");
+            throw new InfrastructureException(InfrastructureMessage.CLIENTE_JA_POSSUI_VENDA, id);
         }
     }
 }

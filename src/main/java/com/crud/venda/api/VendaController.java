@@ -2,6 +2,7 @@ package com.crud.venda.api;
 
 import com.crud.venda.domain.Venda;
 import com.crud.venda.application.VendaUseCase;
+import com.crud.venda.domain.VendaPorCliente;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,11 @@ public class VendaController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Venda consultarPorId(@PathVariable("id") Long id){
         return vendaUseCase.consultarPorId(id);
+    }
+
+    @GetMapping(value = "/cliente/{idCliente}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public VendaPorCliente consultarPorCliente(@PathVariable("idCliente") Long idCliente){
+        return vendaUseCase.consultarPorCliente(idCliente);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

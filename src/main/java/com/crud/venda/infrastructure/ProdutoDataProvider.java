@@ -5,6 +5,8 @@ import com.crud.venda.domain.gateways.ProdutoGateway;
 import com.crud.venda.infrastructure.database.entities.ProdutoEntity;
 import com.crud.venda.infrastructure.database.entities.converter.Converter;
 import com.crud.venda.infrastructure.database.repositories.ProdutoRepository;
+import com.crud.venda.infrastructure.exceptions.InfrastructureException;
+import com.crud.venda.infrastructure.exceptions.InfrastructureMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class ProdutoDataProvider implements ProdutoGateway {
         try {
             produtoRepository.deleteById(id);
         } catch (DataIntegrityViolationException exception) {
-            throw new RuntimeException("Produto não pode ser deletado pois já existe vendas associado a ele.");
+            throw new InfrastructureException(InfrastructureMessage.PRODUTO_JA_POSSUI_VENDA, id);
         }
     }
 }
