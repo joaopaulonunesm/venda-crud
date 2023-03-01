@@ -1,6 +1,9 @@
 package com.crud.venda.api.handler;
 
+import com.crud.venda.api.model.Erro;
+import com.crud.venda.api.model.Response;
 import com.crud.venda.application.exceptions.ApplicationException;
+import com.crud.venda.application.exceptions.ClienteNaoEncontradoException;
 import com.crud.venda.infrastructure.exceptions.InfrastructureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +11,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @ControllerAdvice
@@ -19,11 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ControllerAdviceHandler {
 
     public static final String ERRO_GENERICO = "erro.erro-generico";
+    public static final String ERRO_PREENCHIMENTO = "erro.preenchimento-incorreto";
 
     private final MessageSource messageSource;
 
-    @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<Erro> applicationException(ApplicationException applicationException) {
+    @ExceptionHandler(ClienteNaoEncontradoException.class)
+    public ResponseEntity<Response> applicationException(ClienteNaoEncontradoException applicationException) {
 
         log.error("Houve um erro de aplicação.", applicationException);
 
@@ -34,11 +41,26 @@ public class ControllerAdviceHandler {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(erro);
+                .body(Response.comErro(erro));
+    }
+
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<Response> applicationException(ApplicationException applicationException) {
+
+        log.error("Houve um erro de aplicação.", applicationException);
+
+        Erro erro = Erro.builder()
+                .codigo(applicationException.getCodigo())
+                .mensagem(messageSource.getMessage(applicationException.getCodigo(), applicationException.getParametros(), LocaleContextHolder.getLocaleContext().getLocale()))
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(Response.comErro(erro));
     }
 
     @ExceptionHandler(InfrastructureException.class)
-    public ResponseEntity<Erro> infrastructureHandler(InfrastructureException infrastructureException) {
+    public ResponseEntity<Response> infrastructureHandler(InfrastructureException infrastructureException) {
 
         log.error("Houve um erro de infraestrutura.", infrastructureException);
 
@@ -49,11 +71,25 @@ public class ControllerAdviceHandler {
 
         return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(erro);
+                .body(Response.comErro(erro));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Response> exceptionMethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException) {
+
+        log.error("Houve um erro de preenchimento dos dados.", methodArgumentNotValidException);
+
+        List<Erro> erros = methodArgumentNotValidException.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> Erro.builder().codigo(ERRO_PREENCHIMENTO).mensagem(fieldError.getDefaultMessage()).build())
+                .toList();
+
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(Response.comErros(erros));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Erro> exceptionHandler(Exception exception) {
+    public ResponseEntity<Response> exceptionHandler(Exception exception) {
 
         log.error("Houve um erro genérico.", exception);
 
@@ -64,6 +100,6 @@ public class ControllerAdviceHandler {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(erro);
+                .body(Response.comErro(erro));
     }
 }

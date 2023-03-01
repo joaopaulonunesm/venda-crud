@@ -1,5 +1,6 @@
 package com.crud.venda.domain;
 
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -14,9 +15,11 @@ import java.util.List;
 public class Venda {
 
     private Long id;
-    private BigDecimal valorTotal;
+    @PositiveOrZero(message = "{error.preenchimento-positive-or-zero.desconto}")
     private Double desconto;
-    private BigDecimal valorFinal;
     private List<Produto> produtos;
     private Cliente cliente;
+
+    private BigDecimal valorTotal;
+    private BigDecimal valorFinal;
 }

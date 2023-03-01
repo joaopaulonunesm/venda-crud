@@ -1,4 +1,4 @@
-package com.crud.venda.api.handler;
+package com.crud.venda.api.model;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,42 +1,51 @@
 package com.crud.venda.api;
 
-import com.crud.venda.domain.Cliente;
+import com.crud.venda.api.model.Response;
 import com.crud.venda.application.ClienteUseCase;
+import com.crud.venda.domain.Cliente;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/clientes")
+@RequestMapping(value = ClienteController.REQUEST_MAPPING)
 public class ClienteController {
+
+    public static final String REQUEST_MAPPING = "/clientes";
 
     private final ClienteUseCase clienteUseCase;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Cliente criar(@RequestBody Cliente Cliente) {
-        return clienteUseCase.criar(Cliente);
+    public ResponseEntity<Response<Cliente>> criar(@Valid @RequestBody Cliente cliente) {
+        cliente = clienteUseCase.criar(cliente);
+        return ResponseEntity.created(URI.create(REQUEST_MAPPING + "/" + cliente.getId()))
+                .body(Response.comDado(cliente));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Cliente> consultarTodos() {
-        return clienteUseCase.consultarTodos();
+    public ResponseEntity<Response<List<Cliente>>> consultarTodos() {
+        return ResponseEntity.ok(Response.comDado(clienteUseCase.consultarTodos()));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Cliente consultarPorId(@PathVariable("id") Long id) {
-        return clienteUseCase.consultarPorId(id);
+    public ResponseEntity<Response<Cliente>> consultarPorId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(Response.comDado(clienteUseCase.consultarPorId(id)));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Cliente alterar(@PathVariable("id") Long id, @RequestBody Cliente Cliente) {
-        return clienteUseCase.alterar(id, Cliente);
+    public ResponseEntity<Response<Cliente>> alterar(@PathVariable("id") Long id, @RequestBody Cliente Cliente) {
+        return ResponseEntity.ok(Response.comDado(clienteUseCase.alterar(id, Cliente)));
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable("id") Long id) {
         clienteUseCase.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
